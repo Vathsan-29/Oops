@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Study Buddy</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f7fb;--fg:#0f172a;--mut:#64748b;--card:#fff;--bd:#e2e8f0;--ac:#4f46e5;--ac2:#eef2ff;--ok:#16a34a;--bad:#dc2626;--sh:0 1px 2px rgba(15,23,42,.05),0 8px 24px rgba(15,23,42,.06);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--fg:#e8ecf8;--mut:#93a0ba;--card:#131a2e;--bd:#222c46;--ac:#8b8cff;--ac2:#1b2342;--ok:#4ade80;--bad:#f87171;--sh:0 8px 24px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#0b1020;--fg:#e8ecf8;--mut:#93a0ba;--card:#131a2e;--bd:#222c46;--ac:#8b8cff;--ac2:#1b2342;--ok:#4ade80;--bad:#f87171;--sh:0 8px 24px rgba(0,0,0,.35)}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:16px 16px 40px}
+h2{font-size:24px;letter-spacing:-.02em;margin:18px 0 2px}h3{font-size:16px;margin:0 0 4px}
+.sub,.mut{color:var(--mut);font-size:14px;margin:0}.big{font-size:20px;font-weight:600;margin:6px 0}
+.top{display:flex;align-items:center;justify-content:space-between;padding:6px 0}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:-.01em}
+.who{display:flex;gap:8px;align-items:center}
+.chip{font-size:13px;color:var(--mut);background:var(--card);border:1px solid var(--bd);border-radius:99px;padding:4px 12px}
+.tabs{display:flex;gap:4px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:4px;margin:10px 0 4px;overflow-x:auto}
+.tab{flex:1;white-space:nowrap;border:0;background:none;color:var(--mut);font:inherit;font-weight:500;font-size:14px;padding:9px 14px;border-radius:9px;cursor:pointer}
+.tab.on{background:var(--ac);color:#fff}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;box-shadow:var(--sh);padding:18px;margin-top:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:14px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:16px;box-shadow:var(--sh);padding:16px}
+.stat b{display:block;font-size:28px;letter-spacing:-.02em;margin-top:2px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.mrow{display:flex;justify-content:space-between;gap:10px;font-size:14px;flex-wrap:wrap}
+.bar{height:8px;border-radius:99px;background:var(--ac2);overflow:hidden;margin:10px 0}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--ac),#06b6d4)}
+.mini{margin-top:12px}.mini .bar{margin:6px 0 0}
+.btn{font:inherit;font-size:14px;font-weight:500;padding:9px 14px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--fg);cursor:pointer}
+.btn.pri{background:var(--ac);border-color:var(--ac);color:#fff}.btn.dng{color:var(--bad)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}.acts.c{justify-content:center}
+input,select{width:100%;font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--fg)}
+input:focus,select:focus,.btn:focus-visible,.tab:focus-visible,.opt:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+input.num{width:90px}label{font-size:13px;color:var(--mut);display:block}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.fg+.acts{margin-top:14px}
+.toolbar{display:flex;gap:10px;margin-top:16px}.toolbar input{flex:1}
+.row2{display:flex;gap:10px}.row2 select{flex:1}
+.sh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.pills{display:flex;gap:6px;align-items:flex-start}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--ac2);color:var(--ac)}
+.lv-Easy{color:var(--ok);background:rgba(34,197,94,.13)}.lv-Medium{color:#d97706;background:rgba(245,158,11,.15)}.lv-Hard{color:var(--bad);background:rgba(239,68,68,.13)}
+.q{font-size:19px;margin:16px 0 12px;letter-spacing:-.01em}
+.opt{display:block;width:100%;text-align:left;font:inherit;padding:12px 14px;margin-bottom:8px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--fg);cursor:pointer}
+.opt.ok{border-color:var(--ok);background:rgba(34,197,94,.12)}.opt.bad{border-color:var(--bad);background:rgba(239,68,68,.12)}
+.center{text-align:center}.score{font-size:56px;font-weight:700;letter-spacing:-.03em;color:var(--ac)}.score small{font-size:24px;color:var(--mut)}
+.item{padding:12px 0;border-top:1px solid var(--bd);font-size:14px}.item:first-of-type{border-top:0}
+.empty{color:var(--mut);text-align:center;font-size:14px}
+.login{max-width:380px;margin:9vh auto 0;text-align:center}.login .brand{justify-content:center;font-size:22px;margin-bottom:4px}
+.login form{text-align:left;display:grid;gap:12px;margin-top:18px}.err{color:var(--bad);font-size:13px;min-height:18px;margin:0}
+.foot{margin-top:28px;text-align:center;font-size:12px;color:var(--mut)}.foot button{background:none;border:0;color:var(--ac);font:inherit;cursor:pointer;text-decoration:underline}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#0f172a;color:#fff;border-radius:12px;padding:10px 16px;max-width:92vw;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:.25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}.toast.err{background:#991b1b}.toast small{display:block;opacity:.75;font-size:12px;margin-top:2px}
+</style></head><body>
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=(s,r=document)=>r.querySelector(s),app=$("#app"),KEY="asb_v2";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=()=>{const d=new Date();return [d.getDate(),d.getMonth()+1,d.getFullYear()].map(x=>String(x).padStart(2,"0")).join("-")};
+function notify(m,c,e){const t=$("#toast");t.className="toast show"+(e?" err":"");t.innerHTML="<b>"+esc(m)+"</b>"+(c?"<small>OOP concept · "+esc(c)+"</small>":"");clearTimeout(notify.t);notify.t=setTimeout(()=>t.className="toast",3400)}
+const LOGO='<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="7" fill="var(--ac)"/><path d="M6 8.5c2.5-1 4.5-.8 6 .5 1.5-1.3 3.5-1.5 6-.5V17c-2.5-1-4.5-.8-6 .5-1.5-1.3-3.5-1.5-6-.5z" fill="none" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 9v8.5" stroke="#fff" stroke-width="1.6"/></svg>';
+
+/* Subject base class with three derived classes */
+const LABEL={CORE:"Textbook",PRACTICAL:"Tools",ELECTIVE:"Focus area"};
+const req=(v,f)=>{if(!v||!v.trim())throw new Error(f+" cannot be empty.");if(v.includes("|"))throw new Error(f+" cannot contain the | character.")};
+class Subject{
+ constructor(id,name,cat,total,done,level,extra){
+  if(!Number.isInteger(id)||id<=0)throw new Error("Subject ID must be a positive number.");
+  this.id=id;this.total=0;this.done=0;this.level="Medium";
+  this.setName(name);this.setCat(cat);this.setLevel(level);this.setTotal(total);this.setDone(done);this.extra=extra||""}
+ setName(v){req(v,"Name");this.name=v.trim()}
+ setCat(v){req(v,"Category");this.cat=v.trim()}
+ setLevel(v){const l=["Easy","Medium","Hard"].find(x=>x.toLowerCase()===String(v).trim().toLowerCase());if(!l)throw new Error("Difficulty must be Easy, Medium or Hard.");this.level=l}
+ setTotal(v){if(!Number.isInteger(v))throw new Error("Enter a whole number for total chapters.");if(v<0)throw new Error("Total chapters cannot be negative.");if(v<this.done)throw new Error("Total chapters is below completed chapters.");this.total=v}
+ setDone(v){if(!Number.isInteger(v))throw new Error("Enter a whole number for completed chapters.");if(v<0)throw new Error("Completed chapters cannot be negative.");if(v>this.total)throw new Error("Completed chapters exceed total chapters.");this.done=v}
+ status(){return this.done===0?"Not started":this.done>=this.total?"Completed":"In progress"}
+ eq(o){return this.id===o.id}
+ get label(){return LABEL[this.type]}
+ get weight(){return (this.total-this.done)*({Easy:1,Medium:2,Hard:3}[this.level])}
+ file(){return [this.type,this.id,this.name,this.cat,this.total,this.done,this.level,this.extra].join("|")}
+}
+class CoreSubject extends Subject{get type(){return "CORE"}}
+class PracticalSubject extends Subject{get type(){return "PRACTICAL"}status(){const s=super.status();return s==="Completed"?"Lab ready":s}}
+class ElectiveSubject extends Subject{get type(){return "ELECTIVE"}status(){const s=super.status();return s==="Not started"?"Optional":s}}
+const CLS={CORE:CoreSubject,PRACTICAL:PracticalSubject,ELECTIVE:ElectiveSubject};
+const make=(ty,id,n,c,t,d,lv,ex)=>{const C=CLS[ty];if(!C)throw new Error("Unknown subject type.");return new C(id,n,c,t,d,lv,ex)};
+const BANK={
+ 101:[["Which feature lets a derived class reuse base members?",["Encapsulation","Inheritance","Overloading"],2],["Which keyword enables run-time polymorphism?",["virtual","static","friend"],1],["Which operator creates an object on the heap?",["malloc","new","alloc"],2]],
+ 102:[["Which structure is LIFO?",["Stack","Queue","Tree"],1],["Which structure is FIFO?",["Stack","Queue","Graph"],2],["Which traversal visits the root first?",["Inorder","Preorder","Postorder"],2]],
+ 103:[["Which law says ¬(p∧q) = ¬p∨¬q?",["De Morgan","Distributive","Absorption"],1],["Reflexive + symmetric + transitive means:",["Partial order","Equivalence relation","Function"],2],["How many subsets does an n-element set have?",["n²","2ⁿ","n!"],2]],
+ g:[["Which is the best revision technique?",["Re-reading only","Active recall","Highlighting only"],2],["What is an ideal study block?",["25–50 min with breaks","6 hours straight","5 min"],1],["When should you revise a new topic?",["Never","Within 24 hours","After exams"],2]]};
+
+/* State */
+const subjects=new Map();let quizzes=[],sessions=[],user=null,tab="dash",qz=null,attempts=0,locked=false;
+const list=()=>[...subjects.values()].sort((a,b)=>a.id-b.id);
+function seed(){subjects.clear();[["CORE",101,"Object Oriented Programming","Programming",12,8,"Medium","Classes, Inheritance, Templates"],["CORE",102,"Data Structures","Programming",10,7,"Hard","Stacks, Queues, Trees, Graphs"],["ELECTIVE",103,"Discrete Mathematics","Mathematics",8,3,"Medium","Logic, Sets, Relations, Functions"]].forEach(a=>{const o=make(...a);subjects.set(o.id,o)});
+ quizzes=[{id:101,name:"Object Oriented Programming",ok:8,n:10,pct:80,before:"Easy",after:"Medium",date:"28-09-2026"}];
+ sessions=[{id:102,name:"Data Structures",n:2,min:60,focus:85,date:"29-09-2026",r:"Stacks revised"}]}
+function load(){let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+ if(!d){seed();return}
+ subjects.clear();
+ for(const l of d.s||[]){try{const f=String(l).split("|");if(f.length!==8)throw 0;const o=make(f[0],+f[1],f[2],f[3],+f[4],+f[5],f[6],f[7]);subjects.set(o.id,o)}catch(e){}}
+ quizzes=d.q||[];sessions=d.t||[]}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({s:list().map(x=>x.file()),q:quizzes,t:sessions}))}catch(e){}}
+
+/* Views */
+const bar=s=>`<div class="bar"><i style="width:${s.total?Math.round(s.done*100/s.total):0}%"></i></div>`;
+const stat=(l,v)=>`<div class="stat"><span class="mut">${l}</span><b>${v}</b></div>`;
+const views={
+ dash(){const L=list(),t=L.reduce((a,s)=>a+s.total,0),d=L.reduce((a,s)=>a+s.done,0),pct=t?Math.round(d*100/t):0;
+  const avg=quizzes.length?Math.round(quizzes.reduce((a,q)=>a+q.pct,0)/quizzes.length)+"%":"–",mins=sessions.reduce((a,x)=>a+x.min,0);
+  const next=L.filter(s=>s.done<s.total).sort((a,b)=>b.weight-a.weight)[0];
+  return `<h2>Welcome back, student</h2><p class="sub">Here is where your studies stand today.</p>
+  <div class="stats">${stat("Subjects",L.length)}${stat("Overall progress",pct+"%")}${stat("Average quiz score",avg)}${stat("Study time",Math.floor(mins/60)+"h "+mins%60+"m")}</div>
+  <div class="two"><section class="card"><h3>Subject progress</h3>${L.map(s=>`<div class="mini"><div class="mrow"><span>${esc(s.name)}</span><span class="mut">${s.done}/${s.total}</span></div>${bar(s)}</div>`).join("")||'<p class="empty">No subjects yet.</p>'}</section>
+  <section class="card"><h3>Your study buddy suggests</h3>${next?`<p class="big">${esc(next.name)}</p><p class="sub">${next.total-next.done} chapters left at ${next.level} difficulty. Harder subjects with more chapters left get the biggest share of your time.</p>`:'<p class="sub">You are all caught up. Add a subject to keep going.</p>'}
+  <div class="acts"><button class="btn pri" data-act="tab" data-k="quiz">Take a quiz</button><button class="btn" data-act="tab" data-k="sess">Log a session</button></div></section></div>`},
+ subj(){return `<div class="toolbar"><input id="q" placeholder="Search by ID, name or category" aria-label="Search subjects"><button class="btn pri" data-act="toggleAdd">+ Add subject</button></div>
+  <form class="card" id="addf" data-f="add" hidden><div class="fg">
+  <div><label>Subject ID</label><input name="id" type="number" placeholder="104"></div>
+  <div><label>Type</label><select name="type"><option value="CORE">Core</option><option value="PRACTICAL">Practical</option><option value="ELECTIVE">Elective</option></select></div>
+  <div><label>Name</label><input name="name" placeholder="Computer Networks"></div>
+  <div><label>Category</label><input name="cat" placeholder="Programming"></div>
+  <div><label>Total chapters</label><input name="total" type="number" placeholder="10"></div>
+  <div><label>Chapters completed</label><input name="done" type="number" value="0"></div>
+  <div><label>Difficulty</label><select name="level"><option>Easy</option><option selected>Medium</option><option>Hard</option></select></div>
+  <div><label>Textbook / tools / focus area</label><input name="extra" placeholder="Optional detail"></div></div>
+  <div class="acts"><button class="btn pri">Save subject</button><button type="button" class="btn" data-act="toggleAdd">Cancel</button></div><p class="err" id="fmsg"></p></form><div id="list"></div>`},
+ quiz(){
+  if(qz&&qz.done){const r=qz.res;return `<div class="card center"><p class="mut">${esc(qz.s.name)}</p><div class="score">${qz.ok}<small>/${qz.qs.length}</small></div><p class="big">${r.pct}%</p><p class="sub">Level: ${r.before} → ${r.after}</p><p>${esc(r.remark)}</p><div class="acts c"><button class="btn pri" data-act="again">Another quiz</button><button class="btn" data-act="tab" data-k="dash">Dashboard</button></div></div>`}
+  if(qz){const q=qz.qs[qz.i];return `<div class="card"><div class="mrow"><span class="mut">${esc(qz.s.name)}</span><span class="mut">Question ${qz.i+1} of ${qz.qs.length}</span></div><div class="bar"><i style="width:${qz.i*100/qz.qs.length}%"></i></div><h3 class="q">${esc(q[0])}</h3>
+   ${q[1].map((o,k)=>{let c="opt";if(qz.picked){if(k+1===q[2])c+=" ok";else if(k+1===qz.picked)c+=" bad"}return `<button class="${c}" data-act="pick" data-k="${k+1}"${qz.picked?" disabled":""}>${esc(o)}</button>`}).join("")}
+   ${qz.picked?`<div class="acts"><button class="btn pri" data-act="next">${qz.i+1<qz.qs.length?"Next question":"See results"}</button></div>`:""}</div>`}
+  return `<h2>Subject quiz</h2><p class="sub">Pick a subject, answer three questions and get instant feedback.</p>
+  <form class="card row2" data-f="qstart"><select name="sid" aria-label="Subject">${list().map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join("")}</select><button class="btn pri">Start quiz</button></form>
+  <section class="card"><h3>Quiz history</h3>${quizzes.length?quizzes.slice().reverse().map(q=>`<div class="item"><b>${esc(q.name)}</b> · ${q.ok}/${q.n} (${q.pct}%)<br><span class="mut">${q.before} → ${q.after} · ${q.date}</span></div>`).join(""):'<p class="empty">No quizzes taken yet.</p>'}</section>`},
+ sess(){return `<h2>Study sessions</h2><p class="sub">Log what you studied and your progress updates automatically.</p>
+  <form class="card" data-f="sess"><div class="fg">
+  <div><label>Subject</label><select name="sid">${list().map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join("")}</select></div>
+  <div><label>Chapters completed</label><input name="n" type="number" value="1"></div>
+  <div><label>Duration (minutes)</label><input name="m" type="number" value="45"></div>
+  <div><label>Focus score (0–100)</label><input name="f" type="number" value="80"></div>
+  <div><label>Remarks</label><input name="r" placeholder="What did you cover?"></div></div>
+  <div class="acts"><button class="btn pri">Save session</button></div></form>
+  <section class="card"><h3>Session history</h3>${sessions.length?sessions.slice().reverse().map(x=>`<div class="item"><b>${esc(x.name)}</b> · ${x.n} chapter${x.n===1?"":"s"} · ${x.min} min · focus ${x.focus}%<br><span class="mut">${x.date} · ${esc(x.r)}</span></div>`).join(""):'<p class="empty">No sessions logged yet.</p>'}</section>`}
+};
+function card(s){return `<article class="card"><div class="sh"><div><h3>${esc(s.name)}</h3><p class="mut">#${s.id} · ${esc(s.cat)} · ${s.constructor.name.replace("Subject","")}</p></div><div class="pills"><span class="pill lv-${s.level}">${s.level}</span><span class="pill">${s.status()}</span></div></div>
+ ${bar(s)}<div class="mrow"><span class="mut">${s.done} of ${s.total} chapters</span><span class="mut">${esc(s.label)}: ${esc(s.extra)||"–"}</span></div>
+ <div class="acts"><input type="number" class="num" id="n${s.id}" value="${s.done}" aria-label="Chapters completed"><button class="btn" data-act="upd" data-id="${s.id}">Update</button><button class="btn" data-act="inc" data-id="${s.id}">+1 chapter</button><button class="btn dng" data-act="del" data-id="${s.id}">Delete</button></div></article>`}
+function drawList(){const q=($("#q")?.value||"").toLowerCase().trim();
+ const L=list().filter(s=>!q||String(s.id)===q||s.name.toLowerCase().includes(q)||s.cat.toLowerCase().includes(q));
+ $("#list").innerHTML=L.length?L.map(card).join(""):'<div class="card empty">No subjects match.</div>'}
+function render(){
+ if(!user){app.innerHTML=`<div class="login card"><div class="brand">${LOGO}<span>AI Study Buddy</span></div><p class="sub">Your smart learning assistant</p>
+  <form data-f="login"><div><label>Username</label><input name="u" autocomplete="off" autocapitalize="off"></div><div><label>Password</label><input name="p" type="password" autocomplete="off"></div>
+  <p class="err" id="lmsg"></p><button class="btn pri">Sign in</button><button type="button" class="btn" data-act="fill">Use demo login</button></form></div>`;return}
+ app.innerHTML=`<header class="top"><div class="brand">${LOGO}<span>AI Study Buddy</span></div><div class="who"><span class="chip">student</span><button class="btn" data-act="logout">Log out</button></div></header>
+ <nav class="tabs">${[["dash","Dashboard"],["subj","Subjects"],["quiz","Quiz"],["sess","Sessions"]].map(([k,l])=>`<button class="tab${tab===k?" on":""}" data-act="tab" data-k="${k}">${l}</button>`).join("")}</nav>
+ <main>${views[tab]()}</main><p class="foot">Demo of the AI Study Buddy C++ project · data stays in your browser · <button data-act="reset">Reset demo data</button></p>`;
+ if(tab==="subj")drawList()}
+
+/* Actions */
+const act={
+ tab(b){tab=b.dataset.k;if(qz&&qz.done)qz=null;render()},
+ fill(){$("[name=u]").value="student";$("[name=p]").value="study123"},
+ logout(){save();user=null;notify("Data saved. Logged out.","File handling: ofstream writes the data");render()},
+ reset(){try{localStorage.removeItem(KEY)}catch(e){}seed();qz=null;render();notify("Demo data reset")},
+ toggleAdd(){const f=$("#addf");f.hidden=!f.hidden;$("#fmsg").textContent=""},
+ upd(b){const s=subjects.get(+b.dataset.id);try{s.setDone(parseInt($("#n"+s.id).value,10));save();notify(s.name+" updated · "+s.status(),"Runtime polymorphism: status() of "+s.constructor.name)}catch(e){notify(e.message,"Exception handling: try / throw / catch",1)}drawList()},
+ inc(b){const s=subjects.get(+b.dataset.id);try{s.setDone(s.done+1);save();notify(s.name+": "+s.status(),"Runtime polymorphism: status() of "+s.constructor.name)}catch(e){notify(e.message,"Exception handling: try / throw / catch",1)}drawList()},
+ del(b){const s=subjects.get(+b.dataset.id);subjects.delete(s.id);save();notify(s.name+" deleted","STL map: erase by key");drawList()},
+ pick(b){const q=qz.qs[qz.i];qz.picked=+b.dataset.k;if(qz.picked===q[2])qz.ok++;render()},
+ again(){qz=null;render()},
+ next(){if(qz.i+1<qz.qs.length){qz.i++;qz.picked=null}else{
+  const n=qz.qs.length,pct=Math.round(qz.ok*100/n),L=["Easy","Medium","Hard"],k=L.indexOf(qz.s.level),before=qz.s.level;let after=before;
+  if(pct>=80&&k<2)after=L[k+1];else if(pct<40&&k>0)after=L[k-1];qz.s.level=after;
+  const remark=pct>=80?"Great work, ready for harder topics.":pct>=40?"Keep practising, you are getting there.":"Revise "+qz.s.name+" before the next attempt.";
+  quizzes.push({id:qz.s.id,name:qz.s.name,ok:qz.ok,n,pct,before,after,date:today()});save();qz.done=true;qz.res={pct,before,after,remark};
+  notify("Quiz saved","STL vector: record added with push_back")}render()}
+};
+const forms={
+ login(f){if(locked)return;const v=Object.fromEntries(new FormData(f)),m=$("#lmsg");
+  if(v.u==="student"&&v.p==="study123"){user="student";attempts=0;load();tab="dash";render();notify("Login successful","Basic commands: 3-attempt login loop")}
+  else{attempts++;if(attempts>=3){m.textContent="Too many wrong attempts. Please wait a moment.";locked=true;setTimeout(()=>{locked=false;attempts=0;const e=$("#lmsg");if(e)e.textContent=""},4000)}else m.textContent=`Incorrect login (${attempts}/3).`}},
+ add(f){const v=Object.fromEntries(new FormData(f)),m=$("#fmsg");
+  try{const o=make(v.type,parseInt(v.id,10),v.name,v.cat,parseInt(v.total,10),parseInt(v.done,10),v.level,v.extra);
+   for(const s of subjects.values())if(s.eq(o)){m.textContent="This subject ID already exists.";notify("Duplicate subject ID rejected","Operator overloading: == compares IDs",1);return}
+   subjects.set(o.id,o);save();f.reset();f.hidden=true;m.textContent="";drawList();notify(o.name+" added","Inheritance: new "+o.constructor.name)}
+  catch(e){m.textContent=e.message;notify(e.message,"Exception handling: try / throw / catch",1)}},
+ qstart(f){const s=subjects.get(+new FormData(f).get("sid"));if(!s){notify("Add a subject first","",1);return}qz={s,qs:BANK[s.id]||BANK.g,i:0,ok:0,picked:null,done:false};render()},
+ sess(f){const v=Object.fromEntries(new FormData(f)),s=subjects.get(+v.sid);
+  try{if(!s)throw new Error("Add a subject first.");const n=parseInt(v.n,10),mi=parseInt(v.m,10),fo=parseInt(v.f,10);
+   if(!Number.isInteger(n)||n<0)throw new Error("Chapters completed cannot be negative.");
+   if(!Number.isInteger(mi)||mi<=0)throw new Error("Duration must be a positive number of minutes.");
+   if(!Number.isInteger(fo)||fo<0||fo>100)throw new Error("Focus score must be between 0 and 100.");
+   s.setDone(s.done+n);sessions.push({id:s.id,name:s.name,n,min:mi,focus:fo,date:today(),r:v.r||"–"});save();render();notify("Session saved","STL list: record appended")}
+  catch(e){notify(e.message,"Exception handling: try / throw / catch",1)}}
+};
+app.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(b)act[b.dataset.act](b)});
+app.addEventListener("submit",e=>{e.preventDefault();forms[e.target.dataset.f](e.target)});
+app.addEventListener("input",e=>{if(e.target.id==="q")drawList()});
+render();
+</script></body></html>
